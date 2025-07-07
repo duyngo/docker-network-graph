@@ -30,7 +30,12 @@ This will generate an .svg file containing the graph.
 If you want to generate a graph for a remote system you can also easily
 run this script inside a pre-built docker container:
     
-    docker run --rm -v /var/run/docker.sock:/var/run/docker.sock leoverto/docker-network-graph
+    #docker run --rm -v /var/run/docker.sock:/var/run/docker.sock leoverto/docker-network-graph
+    
+    docker build  --file ./Dockerfile  -t docker-graph . && docker run --rm -v /var/run/docker.sock:/var/run/docker.sock docker-graph
+
+    #docker run --rm -v /var/run/docker.sock:/var/run/docker.sock docker-graph
+
 
 This will just generate and output the graph in the [DOT Language][dot].
 You can then paste that code into [GraphvizOnline][gvonline]
