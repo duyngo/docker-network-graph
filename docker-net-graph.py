@@ -63,8 +63,12 @@ def get_networks(client: docker.DockerClient, verbose: bool) -> typing.Dict[str,
 
     for net in sorted(client.networks.list(), key=lambda k: k.name):
         try:
-            gateway = net.attrs["IPAM"]["Config"][0]["Subnet"]
-        except (KeyError, IndexError):
+            ipam_config = net.attrs["IPAM"]["Config"]
+            if not ipam_config or len(ipam_config) == 0:
+                # This network doesn't seem to be used, skip it
+                continue
+            gateway = ipam_config[0]["Subnet"]
+        except (KeyError, IndexError, TypeError):
             # This network doesn't seem to be used, skip it
             continue
 
