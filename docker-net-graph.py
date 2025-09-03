@@ -11,7 +11,7 @@ from graphviz.backend import FORMATS
 
 # colorlover.scales["12"]["qual"]["Paired"] converted to hex strings
 COLORS = ["#1f78b4", "#33a02c", "#e31a1c", "#ff7f00", "#6a3d9a", "#b15928", "#a6cee3", "#b2df8a", "#fdbf6f",
-          "#cab2d6", "#ffff99"]
+          "#cab2d6", "#d9d912", "#c5d5dd", "#4857e0", "#0c91d8", "#14f56e", "#8b8b8b"]
 i = 0
 
 
@@ -53,7 +53,16 @@ def get_unique_color() -> str:
         i += 1
     else:
         # Generate random color if we've already used the 12 preset ones
-        c = "#%06x".format(random.randint(0, 0xFFFFFF))
+        while True:
+            c = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+            # Avoid colors too close to white or black
+            rgb = int(c[1:], 16)
+            r = (rgb >> 16) & 0xFF
+            g_ = (rgb >> 8) & 0xFF
+            b = rgb & 0xFF
+            if not (r > 240 and g_ > 240 and b > 240) and not (r < 16 and g_ < 16 and b < 16):
+                break
+        # c = "#8b8b8b"
 
     return c
 
